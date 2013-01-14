@@ -10,37 +10,34 @@ window.onload = function () {
 	statusline = document.getElementById("statusline");
 	savebutton = document.getElementById("savebutton");
 
-	editor.addEventlistener("input",
-							  	function(e) {
-									localStorage.note = editor.value;
-									localStorage.lastModified = Date.now();
-									if (idletimer) clearTimeout(idletimer);
-									idletimer = setTimeout(save, 5000);
-									savebutton.disabled = false;
-								}, false);
-
-								sync();
+	editor.addEventlistener("input",function(e) {
+			localStorage.note = editor.value;
+			localStorage.lastModified = Date.now();
+			if (idletimer) clearTimeout(idletimer);
+			idletimer = setTimeout(save, 5000);
+			savebutton.disabled = false;
+		}, false);
+	sync();
 };
 
 
 
 window.onbeforeunload = function () {
-		"use strict";
-		if ( localStorage.lastModified > localStorage.lastSaved)
-			save();
+	if ( localStorage.lastModified > localStorage.lastSaved)
+		save();
 };
 
-window.onoffline = function () { status('Offline');}
 
+window.onoffline = function () { status('Offline');}
 window.ononline = function () { sync();};
 
 
 window.applicationCache.onupdateready = function () {
-		status("A new version of this application is avaliable, Reload to run it");
+	status("A new version of this application is avaliable, Reload to run it");
 };
 
 window.applicationCache.onnoUpdate = function () {
-		status("You are running the latest verison of the application");
+	status("You are running the latest verison of the application");
 };
 
 
@@ -48,18 +45,18 @@ function status(msg) { statusline.innerHTML = msg; }
 
 
 function save() {
-		if(idletimer) clearTimeout(idletimer);
-		idletimer = null;
+	if(idletimer) clearTimeout(idletimer);
+	idletimer = null;
 	
-		if (navigator.online) {
-				var xhr = new XMLHttpRequest();
-				xhr.open("PUT","/note");
-				xhr.send(editor.value);
-				xhr.onload = function () {
-						localStorage.lastSaved = Date.now();
-						savebutton.disabled = true;
-				};
-		}
+	if (navigator.online) {
+		var xhr = new XMLHttpRequest();
+		xhr.open("PUT","/note");
+		xhr.send(editor.value);
+		xhr.onload = function () {
+			localStorage.lastSaved = Date.now();
+			savebutton.disabled = true;
+		};
+	}
 }
 
 
@@ -84,25 +81,25 @@ function sync() {
 					editor.value = localStorage.note = xhr.responseText;
 					localStorage.lastSaved = now;
 					status("newest version downloaded");
-
-				} else {
-
+				} 
+				else {
 					status("ignoring new version of the note");
-					localStorage.lastModified = now;
-				} else status("You are edition the current version of the note");
-									if(localStorage.lastModified > localStorage.lastSaved) {
-										save();
-									}
-									editor.disabled = false;
-									editor.focus();
-								}
-							} else {
-								status("can't sync while offline");
-								editor.disabled = false;
-								editor.focus();
-							}
-
-
+				localStorage.lastModified = now;
+				} 
+				else 
+					status("You are edition the current version of the note");
+				if(localStorage.lastModified > localStorage.lastSaved) {
+					save();
+				}
+				editor.disabled = false;
+				editor.focus();
+			}
+		}
+	   	else {
+			status("can't sync while offline");
+			editor.disabled = false;
+			editor.focus();
+	}
 }
 
 		
