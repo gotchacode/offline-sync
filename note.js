@@ -1,3 +1,4 @@
+/* jshint indent:2 */
 var editor, statusline, savebutton, idletimer;
 
 window.onload = function () {
@@ -101,5 +102,3 @@ function sync() {
       editor.focus();
   }
 }
-
-    
