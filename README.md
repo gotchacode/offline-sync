@@ -1,6 +1,4 @@
-Offline_Note
+Offline Sync
 ============
 
-##Offline web application demo
-
-HTML5 + JS
+A sample application from 'JavaScipt The Definitive guide' book illustratio how to use offline sync using JS and HTML.
